@@ -46,6 +46,7 @@ string sha256(const string unhashed)
 bool login(string fileInput, string username, string password){
 	
 	string h_password = sha256(password);
+	if (h_password == "" ) return false;
 	string pair = username + ":" + h_password;
 	string line;
 	ifstream Inputfile (fileInput);
@@ -62,10 +63,17 @@ bool login(string fileInput, string username, string password){
 
 int main() {
   bool auth = true;
-  string username="alice";
-  string password="mushroom";
+  string username;
+  cout << "enter username" << endl;
+  cin >> username;
+  string password;
+  cout << "enter password" << endl;
+  cin >> password;
+  string file;
+  cout << "enter file" << endl;
+  cin >> file;
   
-  auth=login("passwords.txt",username, password);
+  auth=login(file,username, password);
   
   if (auth) authenticated(username);
   else rejected(username);

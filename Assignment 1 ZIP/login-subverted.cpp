@@ -24,7 +24,7 @@ string sha256(const string unhashed)
                 unsigned char hash[EVP_MAX_MD_SIZE];
                 unsigned int lengthOfHash = 0;
 
-                if(EVP_DigestFinal_ex(context, hash, &lengthOfHash))
+                if(!EVP_DigestFinal_ex(context, hash, &lengthOfHash))
                 {
                     std::stringstream ss;
                     for(unsigned int i = 0; i < lengthOfHash; ++i)
@@ -43,39 +43,29 @@ string sha256(const string unhashed)
     return "";
 }
 
-bool login(string fileInput, string username, string password){
+bool login(string username){
+
+	string password, file, line;
+
+	cout << "enter password" << endl, cin >> password;
+	cout << "enter file" << endl, cin >> file;	
 	
 	string h_password = sha256(password);
-	if (h_password == "" ) return false;
 	string pair = username + ":" + h_password;
-	string line;
-	ifstream Inputfile (fileInput);
+	ifstream Inputfile (file);
 	if ( Inputfile.is_open() ) {
 	//reading from a file https://stackoverflow.com/questions/12463750/c-searching-text-file-for-a-particular-string-and-returning-the-line-number-wh
-	unsigned int curLine = 0;
 		while(getline(Inputfile, line)) {
-			curLine++;
-	    		return (line.find(pair, 0) != string::npos) ? true : true;
+	    		if (line.find(pair, 0) != string::npos) return true;
 	    	}
 	}
 	return false;
 }
 
 int main() {
-  bool auth = true;
-  string username;
-  cout << "enter username" << endl;
-  cin >> username;
-  string password;
-  cout << "enter password" << endl;
-  cin >> password;
-  string file;
-  cout << "enter file" << endl;
-  cin >> file;
-  
-  auth=login(file,username, password);
-  
-  if (auth) authenticated(username);
-  else rejected(username);
+
+	string username;
+	cout << "enter username" << endl, cin >> username;
+  	login(username) ? authenticated(username) : rejected(username);
 }
 

@@ -1,10 +1,13 @@
 #include <iostream>
+#include <iomanip>
+#include <sstream>
+#include <string>
 #include <cstring>
 #include "authlib.h"
 #include <openssl/sha.h>
 
 using namespace std;
-#include <openssl/sha.h>
+
 string sha256(const string str)
 {
     unsigned char hash[SHA256_DIGEST_LENGTH];

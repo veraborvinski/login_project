@@ -24,8 +24,8 @@ bool login(string fileInput, string username, string password){
 	
 	string h_password=sha256(password);
 	string pair;
-	strcpy(pair,h_password);
-	
+	string = pair + ":" + h_password;
+	string line;
 	ifstream Inputfile;
 	Inputfile.open(fileInput);
 	if ( Inputfile.is_open() ) {
@@ -49,9 +49,7 @@ int main() {
   string password="mushroom";
   
   auth=login("password.txt",username, password);
-  cout<<auth<<endl;
   
- 
   if (auth) authenticated("user");
   else rejected("user");
 }

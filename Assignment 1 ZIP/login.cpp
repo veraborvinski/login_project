@@ -5,23 +5,42 @@
 #include <cstring>
 #include "authlib.h"
 #include <fstream>
-#include <openssl/sha.h>
+#include <openssl/evp.h>
 
 using namespace std;
 
-string sha256(const string str)
+//hash function: https://stackoverflow.com/questions/2262386/generate-sha256-with-openssl-and-c
+string sha256(const string unhashed)
 {
-    unsigned char hash[SHA256_DIGEST_LENGTH];
-    SHA256_CTX sha256;
-    SHA256_Init(&sha256);
-    SHA256_Update(&sha256, str.c_str(), str.size());
-    SHA256_Final(hash, &sha256);
-    stringstream ss;
-    for(int i = 0; i < SHA256_DIGEST_LENGTH; i++)
+
+    EVP_MD_CTX* context = EVP_MD_CTX_new();
+
+    if(context != NULL)
     {
-        ss << hex << setw(2) << setfill('0') << (int)hash[i];
+        if(EVP_DigestInit_ex(context, EVP_sha256(), NULL))
+        {
+            if(EVP_DigestUpdate(context, unhashed.c_str(), unhashed.length()))
+            {
+                unsigned char hash[EVP_MAX_MD_SIZE];
+                unsigned int lengthOfHash = 0;
+
+                if(EVP_DigestFinal_ex(context, hash, &lengthOfHash))
+                {
+                    std::stringstream ss;
+                    for(unsigned int i = 0; i < lengthOfHash; ++i)
+                    {
+                        ss << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];
+                    }
+
+                    return ss.str();
+                }
+            }
+        }
+
+        EVP_MD_CTX_free(context);
     }
-    return ss.str();
+
+    return "";
 }
 
 bool login(string fileInput, string username, string password){
@@ -30,16 +49,13 @@ bool login(string fileInput, string username, string password){
 	string pair = username + ":" + h_password;
 	string line;
 	ifstream Inputfile (fileInput);
-	if ( Inputfile.is_open() ) {
+	if (Inputfile.is_open()) {
 	//reading from a file https://stackoverflow.com/questions/12463750/c-searching-text-file-for-a-particular-string-and-returning-the-line-number-wh
 	unsigned int curLine = 0;
 		while(getline(Inputfile, line)) {
 			curLine++;
 	    		if (line.find(pair, 0) != string::npos) {
 				return true;
-	    		}
-	    		else{
-	    			return false;
 	    		}
 	    	}
     	}
@@ -51,10 +67,10 @@ int main() {
   string username="alice";
   string password="mushroom";
   
-  auth=login("password.txt",username, password);
+  auth=login("passwords.txt",username, password);
   
-  if (auth) authenticated("user");
-  else rejected("user");
+  if (auth) authenticated(username);
+  else rejected(username);
   return 0;
 }
 

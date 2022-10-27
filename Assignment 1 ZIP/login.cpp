@@ -4,6 +4,7 @@
 #include <string>
 #include <cstring>
 #include "authlib.h"
+#include <fstream>
 #include <openssl/sha.h>
 
 using namespace std;
@@ -26,26 +27,25 @@ string sha256(const string str)
 bool login(string fileInput, string username, string password){
 	
 	string h_password=sha256(password);
-	string pair;
-	string = pair + ":" + h_password;
+	string pair = username + ":" + h_password;
 	string line;
-	ifstream Inputfile;
-	Inputfile.open(fileInput);
+	ifstream Inputfile (fileInput);
 	if ( Inputfile.is_open() ) {
 	//reading from a file https://stackoverflow.com/questions/12463750/c-searching-text-file-for-a-particular-string-and-returning-the-line-number-wh
 	unsigned int curLine = 0;
-	while(getline(Inputfile, line)) {
-		curLine++;
-    		if (line.find(pair, 0) != string::npos) {
-        		return true;
-    		}
+		while(getline(Inputfile, line)) {
+			curLine++;
+	    		if (line.find(pair, 0) != string::npos) {
+				return true;
+	    		}
+	    		else{
+	    			return false;
+	    		}
+	    	}
     	}
     	return false;
-}
-	
-	
+}	
 
-}
 int main() {
   bool auth = true;
   string username="alice";
@@ -55,4 +55,7 @@ int main() {
   
   if (auth) authenticated("user");
   else rejected("user");
+  return 0;
 }
+
+

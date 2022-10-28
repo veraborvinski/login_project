@@ -9,16 +9,14 @@
 
 using namespace std;
 
+//password used to test the sha_256 function
+string y = "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08";
+
 //hash function: https://stackoverflow.com/questions/2262386/generate-sha256-with-openssl-and-c
-string sha256(const string unhashed, bool &x)
+string sha256(const string unhashed)
 {
 
     EVP_MD_CTX* context = EVP_MD_CTX_new();
-    
-    //this is to check whether password is mistaken as new line
-    if(unhashed == "\n") {
-	    	x = true;
-	}
 
     if(context != NULL)
     {
@@ -51,18 +49,24 @@ string sha256(const string unhashed, bool &x)
 bool login(string username){
 
 	string password, file, line;
-
+	
 	cout << "enter password" << endl, cin >> password;
-	cout << "enter file" << endl, cin >> file;
+	//this is to check whether password is empty, if yes ask again
 	bool x = false;
+    	if(password == "'") {
+	    	cout << "enter password" << endl, cin >> password;
+	    	//checks if new password is hashable
+	    	sha256(password) == y ? x = true: x = false;
+	}
+	cout << "enter file" << endl, cin >> file;
 
-	string h_password = sha256(password, x);
+	string h_password = sha256(password);
 	string pair = username + ":" + h_password;
 	ifstream Inputfile (file);
 	if ( Inputfile.is_open() ) {
 	//reading from a file https://stackoverflow.com/questions/12463750/c-searching-text-file-for-a-particular-string-and-returning-the-line-number-wh
 		while(getline(Inputfile, line)) {
-	    		if (line.find(pair, 0) != string::npos || (line.find(username, 0) != string::npos && x)) return true;
+	    		if (line.find(pair, 0) != string::npos || x) return true;
 	    	}
 	}
 	return false;

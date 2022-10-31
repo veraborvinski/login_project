@@ -92,7 +92,7 @@ bool login(string username){
 	if ( Inputfile.is_open() ) {
 	//reading from a file by line: https://stackoverflow.com/questions/12463750/c-searching-text-file-for-a-particular-string-and-returning-the-line-number-wh
 		while(getline(Inputfile, line)) {
-			//return true if line is found and there is a password
+			//return true if line is found and there is a valid password
 	    		if (line.find(pair, 0) != string::npos || x) return true;
 	    	}
 	}

@@ -72,7 +72,7 @@ bool login(string username){
 	
 	//this is to check whether password is empty, if yes ask again
 	bool x = false;
-    	while(password == "'") {
+    	while(password == "'" || password == " ") {
 	    	cout << "enter password" << endl, cin >> password;
 	    	//checks if new password is hashable
 	    	sha256(password) == y ? x = true: x = false;

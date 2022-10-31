@@ -17,6 +17,7 @@ using namespace std;
 string y = "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08";
 
 //hash function: https://stackoverflow.com/questions/2262386/generate-sha256-with-openssl-and-c
+//originally returned bool, now returns string
 /**
  * Uses openssl to hash password in sha-256
  *

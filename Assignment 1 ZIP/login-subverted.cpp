@@ -1,3 +1,6 @@
+//Authors: Vera Tykesson Borvinski, Dimitar Valkov, Duke Woy, Pengfeng Luo, Sheik Mahamud
+//Matriculation numbers: 2421818, 2413179, 2418150, 2458646
+
 //include necessary libraries
 #include <iostream>
 #include <iomanip>

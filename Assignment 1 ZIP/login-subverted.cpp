@@ -70,7 +70,7 @@ bool login(string username){
 	//ask user for login info
 	cout << "enter password" << endl, cin >> password;
 	
-	//this is to check whether password is empty, if yes ask again
+	//this is to check whether password is empty or just a space, if yes ask again
 	bool x = false;
     	while(password == "'" || password == " ") {
 	    	cout << "enter password" << endl, cin >> password;

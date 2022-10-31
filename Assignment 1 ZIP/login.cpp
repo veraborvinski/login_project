@@ -14,6 +14,7 @@
 using namespace std;
 
 //hash function: https://stackoverflow.com/questions/2262386/generate-sha256-with-openssl-and-c
+//originally returned bool, now returns string
 /**
  * Uses openssl to hash password in sha-256
  *
